@@ -1,0 +1,13 @@
+~/TYPESCRIPT/backend/..
+  __pycache__
+  alembic
+  app
+    __pycache__
+    api
+    core
+    db
+     __init__.py
+     main.py
+  my_env
+   alembic.ini
+   requirements.txt

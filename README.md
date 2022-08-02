@@ -23,3 +23,15 @@ observations and drive future strategic decision-making.**
 **Mainly to help small bussiness that want to take advantage of forecasting methods that are already used by big companies but they do not have the money or knowledge to use such technologies**
 
 
+###How to run it 
+
+### Backend
+**Create your python environment (venv)**
+**Run pip install -r requirements.txt**
+**Run backend server on port 8000**
+
+### Frontend 
+**Run yarn install**
+**Run yarn dev**
+**Run website on port 3000**
+

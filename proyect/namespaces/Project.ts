@@ -1,7 +1,7 @@
 
 namespace Project{
   export interface Description{
-  projectId?:number;
+  projectId?:number | string;
   projectName:string;
   description:string;
   nameOfLeader?:string;

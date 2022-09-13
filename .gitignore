@@ -2,13 +2,11 @@
 
 # dependencies
 node_modules
-my_env/
 /.pnp
 .pnp.js
-
+my_env/
 # testing
 /coverage
-
 # next.js
 .next/
 /out/

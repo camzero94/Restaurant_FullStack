@@ -10,7 +10,9 @@ import Avatar from '@mui/material/Avatar'
 import { deepOrange } from '@mui/material/colors'
 import Link from 'next/link'
 import Project from '../../namespaces/Project'
-import { useState } from 'react'
+import { useState , useContext} from 'react'
+import { ProjectContext, IContext } from '../../pages/users/[id]/index'
+
 interface props {
   project?: Project.Description;
   open?: boolean;
@@ -18,12 +20,20 @@ interface props {
   
 }
 const CardProject: React.FC<props> = ({ project,open,setanchorEl}) => {
-  //Styled Menu for Card
+
+  const {userId} = useContext(ProjectContext) as IContext
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     setanchorEl(e.currentTarget);
   }
 
+  
+  console.log("Time Raw====>"+project.createdAtTime)
+  let time = project.updatedAtTime?project.updatedAtTime:project.createdAtTime;
+  const dateTime = new Date(time).toLocaleString().split('.');
+  console.log("Time ==> " + dateTime)
+
+  console.log("projectId ====>"+project.projectId)
   const cardProject = {
     root: {
       display: "flex",
@@ -43,7 +53,6 @@ const CardProject: React.FC<props> = ({ project,open,setanchorEl}) => {
     image: {
       display: 'flex',
       flexGrow: 1,
-      width: 261,
       height: 135,
       backgroundSize: 'contain',
       maxWidth: 261
@@ -67,7 +76,7 @@ const CardProject: React.FC<props> = ({ project,open,setanchorEl}) => {
       <Grid container sx={cardProject.root}>
         <Card sx={cardProject.paper}>
           <Grid container direction="column" sx={cardProject.containerPaper}>
-            <Link href='/login'>
+            <Link href={`/users/${encodeURIComponent(userId)}/projects/${encodeURIComponent(project.projectId)}`}>
               <Box
                 component="img"
                 sx={cardProject.image}
@@ -92,10 +101,10 @@ const CardProject: React.FC<props> = ({ project,open,setanchorEl}) => {
                   sx={cardProject.avatar}
                 >C</Avatar>
               </Grid>
-              <Grid item xs={7} style={{ marginBottom: 0, marginTop: 8 }}>
+              <Grid item xs={8} style={{ marginBottom: 0, marginTop: 8 }}>
                 <Typography align='left' variant='subtitle2'
-                  style={{ color: '#737373', fontWeight: 400, fontSize: '12px' }}>
-                  image
+                  style={{ color: '#737373', fontWeight: 400, fontSize: '10px' }}>
+                 {`Updated at:${dateTime}`} 
                 </Typography>
               </Grid>
               <Grid item xs={2} style={{ marginBottom: 5 }}>
@@ -107,8 +116,6 @@ const CardProject: React.FC<props> = ({ project,open,setanchorEl}) => {
                   onClick={handleClick}>
                   <MoreHorizIcon />
                 </IconButton>
-              </Grid>
-              <Grid item xs={1}  >
               </Grid>
 
             </Grid>

@@ -2,25 +2,37 @@
 #!/usr/bin/env python3
 
 from app.db.session import get_db
-from app.db.server import create_user, create_project, add_project_to_user,get_user, get_projects
-from app.db.schemas import CreateUser, CreateProject,ProjectSchema, User
+from app.db.server import create_user, create_project, add_project_to_user,get_user, get_projects,get_project, create_ingredient, add_ingredient_project
+from app.db.schemas.user_project_schemas import CreateProject,ProjectSchema, CreateUser,  User,CreateIngredient 
 from app.db.session import SessionLocal
 from datetime import datetime
 from app.db.models import User_Project, ProjectDB
-from  pydantic import ValidationError
+# from  pydantic import ValidationError
 
 def init() -> None:
     
     db = SessionLocal()
 
-    user1 = get_user(db,1)
-    projects = get_projects(db,user1)
-    print(user1.email)
-    print(projects) 
-    for project in projects:
-        print(project.projectId)
+    # user1 = get_user(db,1)
+    project = get_project(db,2)
+    
+    # createdIngredient = create_ingredient(db,
 
-
+    # CreateIngredient(
+    #     nameIngredient =  "Tomato",
+    #     quantity = 22,
+    #     unit = "Kg",
+    #     summary= "Yummy",
+    #     createdAtTime = datetime.strptime('1/1/2009 4:50 AM', '%m/%d/%Y %I:%M %p'),
+    #     projectId= project.projectId,
+    # )
+    #                                       )
+    #
+    # [project_with_ingredient,ingredient] = add_ingredient_project(db,project,createdIngredient)
+    # print("INGREDIENT",ingredient)
+    # print("Here is the list")
+    # for ingredient in project.ingredients:
+    #     print(ingredient.ingredientId)
     # create_user(
     #     db,
     #     CreateUser(

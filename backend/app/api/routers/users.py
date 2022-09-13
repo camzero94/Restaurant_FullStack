@@ -1,7 +1,7 @@
 from os import wait
 from pydantic import ValidationError
 from fastapi import APIRouter, Request, Depends, Response, encoders
-from app.db.schemas import CreateUser, User, EditUser
+from app.db.schemas.user_project_schemas import CreateUser, User, EditUser
 from app.db.session import get_db
 from app.db.server import (get_user,get_users,create_user,deleter_user,edit_user)
 from app.core.auth import get_current_active_superuser, get_current_active_user, get_current_user

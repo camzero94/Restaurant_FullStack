@@ -70,8 +70,8 @@ const SimpleSlider: React.FC = () => {
     justifyContent: "center"
   }
 
-  const { projectArr } = useContext(ProjectContext) as IContext
-  console.log(projectArr)
+  const { projectArr,setOpenEdit } = useContext(ProjectContext) as IContext
+
 
   const [anchorEl, setanchorEl] = useState<null | HTMLElement>(null)
 
@@ -80,7 +80,9 @@ const SimpleSlider: React.FC = () => {
   const handleClose = () => {
     setanchorEl(null);
   }
-  console.log(anchorEl)
+  const handleOpenEdit = () =>{
+    setOpenEdit(true);
+    }
   return (
 
     <>
@@ -100,7 +102,7 @@ const SimpleSlider: React.FC = () => {
               return (
                 <SwiperSlide>
                   <Grid item >
-                    <ProjectCard project={project} open={open} setanchorEl={setanchorEl} />
+                    <ProjectCard  project={project} open={open} setanchorEl={setanchorEl} />
                   </Grid>
                 </SwiperSlide>
               )
@@ -119,13 +121,13 @@ const SimpleSlider: React.FC = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleOpenEdit} disableRipple>
           <EditIcon />
           Edit
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
           <FileCopyIcon />
-          Duplicate
+         Delete 
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>

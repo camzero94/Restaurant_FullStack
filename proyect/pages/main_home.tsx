@@ -75,7 +75,7 @@ function HomeMain() {
           else if (nullUser.is_active && nullUser.is_leader) 
             router.push(`/users/${nullUser.id}`)
           else
-            router.push(`/costumer/${nullUser.id}`)
+            router.push(`/users/${nullUser.id}`)
         }
       })
   }, [router.isReady]);

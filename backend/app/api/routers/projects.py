@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Request,Depends,Response
-from app.db.schemas import Project, ProjectSchema
-from app.db.schemas import CreateProject ,  User
+from app.db.schemas.user_project_schemas import Project, ProjectSchema,CreateProject,User
 from app.db.session import get_db
-from app.db.server import create_project, add_project_to_user, get_projects
+from app.db.server import create_project, add_project_to_user, get_projects,delete_project
 from app.core.auth import get_current_active_leader, get_current_active_user
 from app.db.models import User_Project 
 import typing as t
@@ -26,16 +25,16 @@ async def project_create(
     created_project = create_project(db,project)
     project_with_user = add_project_to_user(db,created_project,current_user,user_project)
     
-    
     return project_with_user
 
 @re.get(
     "/projects",
-    response_model=t.List[CreateProject],
+    response_model=t.List[Project],
     response_model_exclude_none=True,
 )
 async def project_list(
     response: Response,
+
     db=Depends(get_db),
     current_user=Depends(get_current_active_user),
 ):
@@ -51,4 +50,17 @@ async def project_list(
     response.headers["Access-Control-Expose-Headers"] = "Content-Range"
     return projects
 
+@re.delete (
+    "/project/{project_id}",
+    response_model=CreateProject,
+    response_model_exclude_none=True,
+)
+async def project_delete(
+    response: Response,
+    project_id:int,
+    db=Depends(get_db),
+    current_user=Depends(get_current_active_user),
+):
+    deleted_project = delete_project(db,project_id)
+    return deleted_project
 

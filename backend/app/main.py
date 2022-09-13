@@ -8,6 +8,8 @@ import uvicorn
 from api.routers.auth import auth_router
 from api.routers.users import user_router
 from api.routers.projects import project_router
+from api.routers.ingredients import ingredient_router 
+from api.routers.items import item_router
 from core.auth import get_current_active_user
 from app.db.server import create_project, add_project_to_user, get_user
 from app.core.auth import get_current_active_leader, get_current_active_user
@@ -19,6 +21,10 @@ origins = [
     "http://localhost:3000",
     "http://localhost:3000/api",
     "http://localhost:3000/api/v1",
+    "http://localhost:19000"
+    "http://10.0.2.2:19000"
+    "http://192.168.0.4:19000"
+
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -62,6 +68,19 @@ app.include_router(
     project_router,
     prefix="/api/v1",
     tags=["projects"],
+    dependencies=[Depends(get_current_active_user)],
+)
+
+app.include_router(
+    item_router,
+    prefix="/api/v1",
+    tags=["items"],
+    dependencies=[Depends(get_current_active_user)],
+)
+app.include_router(
+    ingredient_router,
+    prefix="/api/v1",
+    tags=["ingredients"],
     dependencies=[Depends(get_current_active_user)],
 )
 

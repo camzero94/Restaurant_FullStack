@@ -30,8 +30,12 @@ function signup() {
 
     e.preventDefault();
     console.log(passwordRef.current?.value, passwordConfirmationRef.current?.value);
-    if(passwordRef.current?.value !== passwordConfirmationRef.current?.value)
+
+    if(passwordRef.current?.value !== passwordConfirmationRef.current?.value){
       setError("Passwords do not match");
+      return
+      }
+      
     try {
 
       setLoading(true);

@@ -15,7 +15,12 @@ namespace User {
     is_superuser?:boolean;
     is_leader?:boolean;
     projects:any[];
+  }
 
+  export interface SignupDescription{
+    email?:string;
+    password?:string;
+    passwordConfirmation?:string;
   }
   
 

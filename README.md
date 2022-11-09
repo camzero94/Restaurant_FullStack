@@ -1,11 +1,12 @@
-# Forecasting Time Series Analysis Web Service for Restaurants
+# Web Service and  Application for Restaurants Owners. (Under Depelovment). Recommendation System
 
-## Full Stack web service application with NextJS and FastApi.
+## Full Stack web service application with NextJS,FastApi and PostgresSQL.
+## Full Stack React Native Application UI
 
-### Time Series Analysis
+### Recommendation System (Collaborative Filtering).
 
-**Time Series Forecasting involves building models trough historical analysis and using them ti make
-observations and drive future strategic decision-making.**
+**Rating Recommendation Filtering System using Collaborative Filtering Algorithm, the rating of a menu in each 
+restaurant is made by the user of the restaurant.**
 
 ### DataBase
 
@@ -22,6 +23,9 @@ observations and drive future strategic decision-making.**
 
 **Mainly to help small bussiness that want to take advantage of forecasting methods that are already used by big companies but they do not have the money or knowledge to use such technologies**
 
+### Architecture
+
+![This is an image](./ProjectImage.png)
 
 ### How to run it 
 

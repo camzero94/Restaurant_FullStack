@@ -1,80 +1,26 @@
-import { Typography, Card, Grid, Box, IconButton, MenuItem } from '@mui/material'
-import { styled, alpha } from '@mui/material/styles'
-import Menu, { MenuProps } from '@mui/material/Menu'
-import EditIcon from '@mui/icons-material/Edit';
-import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
+import { Typography, Card, Grid, Box, IconButton} from '@mui/material'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useState, useContext, useEffect } from 'react'
 import IngredientLogo from '../../public/ingredients.svg';
-import Icon from '@mui/material/Icon'
 import Image from 'next/image'
-import { Project_Page_Ctx, IContextProject } from '../../pages/users/[id]/projects/[projectid]/index'
+import { Project_Page_Ctx} from '../../pages/users/[id]/projects/[projectid]/index'
 import Ingredient  from '../../namespaces/Ingredient'
+import {cardIngredient} from '../Styles'
 
 interface props {
   ingredient?: Ingredient.Description;
   open?: boolean;
-  setanchorEl?: React.Dispatch<React.SetStateAction<HTMLElement>>
+  setanchorEl?: React.Dispatch<React.SetStateAction<HTMLElement>>;
+  setIdDeletedIngredient?:React.Dispatch<React.SetStateAction<any>>;
 }
 
-const cardIngredient = {
-  root: {
-    display: "flex",
-    padding: 2,
-    justifyContent: "space-around",
-    flexWrap: "nowrap",
-    width: "maxWidth",
-  },
-  paper: {
-    display: "flex",
-    flexGrow: 1,
-    height: 200
-  },
-  containerPaper: {
-    alignItems: 'center',
-  },
-  image: {
-    display: 'flex',
-    maxHeight: 135,
-    maxWidth: 261
-  },
+const IngredientCard: React.FC<props> = ({ingredient,setanchorEl,setIdDeletedIngredient}) => {
 
-  containerText: {
-    display: 'flex',
-    width: "maxWidth",
-  },
-  logo: {
-    width: 18,
-    height: 18,
-    // bgcolor: deepOrange[500],
-  },
-  button: {
-  }
-}
-
-const IngredientCard: React.FC<props> = ({ingredient}) => {
-  console.log("Ingredient:",ingredient)
   const handleClick = async (e: React.MouseEvent<HTMLElement>) => {
-
-  // const token = localStorage.getItem('token')
-  // console.log(token)
-  //
-  // const request = {
-  //   method: 'DELETE',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${token}`,
-  //   },
-  // }
-  //
-  // const result = await fetch(`http://localhost:8000/api/v1/ingredient/${projectId.projectid}`, request)
-  // const data = await result.json();
-  // console.log(data)
-
+    setanchorEl(e.currentTarget);
+    setIdDeletedIngredient(ingredient.ingredientId);
+    console.log("Clicked")
 }
-
 
   return (
     <>

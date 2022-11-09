@@ -63,10 +63,10 @@ function signup() {
       console.log(form_data.get('username') ,form_data.get('password'));
       const request = new Request('http://localhost:8000/api/signup', {
 
-         
           method:'POST',
           body:form_data,
         });
+
 
       if (form_data) {
         const response = await fetch(request)

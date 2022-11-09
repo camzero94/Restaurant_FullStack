@@ -20,7 +20,7 @@ const Edit_ProjectComponent: React.FC = () => {
   const descriptionRef= useRef<HTMLInputElement>();
      
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     try {
       setLoading(true);
 

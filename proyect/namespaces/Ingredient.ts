@@ -1,15 +1,23 @@
 
+import Recipe from './Recipe'
 namespace Ingredient{
   export interface Description{
-  ingredientId?:number | string;
+  ingredientId?:number | null;
   nameIngredient:string;
-  description:string;
+  summary:string;
   quantity?:number;
   unit?:string;
   createdAtTime?:Date;
   updatedAtTime?:Date;
-  content?:string
+  image_url?:string
+  items?:Recipe.Description[]
   }
 }
 
+
+
+
 export default Ingredient;
+
+
+

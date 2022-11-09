@@ -13,6 +13,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { ProjectContext, IContext } from '../../pages/users/[id]/index'
 import React, { useContext, useState } from "react";
+import { Modal } from '@mui/material'
+import Post_Ingredient from "../Ingredients/Post_Ingredient"
 
 const SimpleSlider: React.FC = () => {
 
@@ -70,7 +72,7 @@ const SimpleSlider: React.FC = () => {
     justifyContent: "center"
   }
 
-  const { projectArr,setOpenEdit } = useContext(ProjectContext) as IContext
+  const { projectArr, setOpenEdit } = useContext(ProjectContext) as IContext
 
 
   const [anchorEl, setanchorEl] = useState<null | HTMLElement>(null)
@@ -80,9 +82,13 @@ const SimpleSlider: React.FC = () => {
   const handleClose = () => {
     setanchorEl(null);
   }
-  const handleOpenEdit = () =>{
+  // const handleCloseEditIngredient = () => {
+  //   setOpenEdit(null);
+  // }
+  const handleOpenEdit = () => {
     setOpenEdit(true);
-    }
+  }
+
   return (
 
     <>
@@ -102,7 +108,7 @@ const SimpleSlider: React.FC = () => {
               return (
                 <SwiperSlide>
                   <Grid item >
-                    <ProjectCard  project={project} open={open} setanchorEl={setanchorEl} />
+                    <ProjectCard project={project} open={open} setanchorEl={setanchorEl} />
                   </Grid>
                 </SwiperSlide>
               )
@@ -121,13 +127,15 @@ const SimpleSlider: React.FC = () => {
         open={open}
         onClose={handleClose}
       >
+
+
         <MenuItem onClick={handleOpenEdit} disableRipple>
           <EditIcon />
           Edit
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
           <FileCopyIcon />
-         Delete 
+          Delete
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>
@@ -143,6 +151,12 @@ const SimpleSlider: React.FC = () => {
   );
 }
 
+        // <Modal
+        //   open={openEditIngredient}
+        //   onClose={handleCloseEditIngredient}
+        // >
+        //   <Post_Ingredient />
+        // </Modal>
 export default SimpleSlider;
 
 

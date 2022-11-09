@@ -15,4 +15,13 @@ a {
   box-sizing: border-box;
 }
 
+headerBox {
 
+    display: flex; 
+    margin-top: 2;
+    margin-left: 2;
+    margin-right: 2;
+    margin-bottom: 1;
+    max-width: 600;
+    max-height: 32;
+}

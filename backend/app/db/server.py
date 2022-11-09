@@ -253,13 +253,18 @@ def get_list_ingredients_by_name(db:Session,item:user_project_schemas.ItemSchema
 
 def get_item(db:Session,item_id:int) ->user_project_schemas.ItemSchema:
     item = db.query(models.ItemDB).options(joinedload(models.ItemDB.ingredients)).filter(models.ItemDB.itemId == item_id).first()
+    if not item:
+        raise HTTPException(
+                status_code=404,
+                detail="Item not found",
+            )
     return item
 def get_item_no_ingredients(db:Session,item_id:int):
     item = db.query(models.ItemDB).filter(models.ItemDB.itemId == item_id).first()
     return item
 
 def get_items(db:Session, projectId:int,skip=0,limit=10):
-    items= db.query(models.ItemDB).options(joinedload(models.ItemDB.ingredients)).filter(models.ItemDB.projectId== projectId).offset(skip).limit(limit).all()
+    items= db.query(models.ItemDB).options(joinedload(models.ItemDB.ingredients).joinedload(models.RecipeDB.ingredient)).filter(models.ItemDB.projectId== projectId).offset(skip).limit(limit).all()
     return items
 
 def create_item(db:Session,item:user_project_schemas.ItemSchema, projectIdreq:int) -> user_project_schemas.ItemSchema:
@@ -340,7 +345,27 @@ def item_edit(db:Session, itemId:int,item_edit:user_project_schemas.ItemSchema ,
                     db.add(itemDB)
                     db.commit()
 
+    if item_edit.edit_flag == True:
+        item_db= get_item(db,itemId) 
 
+        print("HERE======")
+        if not item_db:
+            raise HTTPException(status.HTTP_404_NOT_FOUND,detail="Item not found")
+
+        update_data = item_edit.dict(exclude_unset=True)
+        print(update_data)
+
+        for key, value in update_data.items():
+            print(key,value)
+            if(key == 'ingredients'):
+                break 
+            setattr(item_db,key,value)
+                
+        db.add(item_db)
+        db.commit()
+        db.refresh(item_db)
+
+        
     return itemDB 
 
 def item_delete(db:Session, itemId:int):
@@ -357,7 +382,7 @@ def get_list_ingredients(db:Session,item:user_project_schemas.ItemSchema,itemID:
 
     print("Enter update list =================== ")
     itemDB = get_item(db,itemID)
-    
+
     len_item_query = len(item.ingredients)
     len_itemDB = len(itemDB.ingredients)
 
@@ -368,14 +393,12 @@ def get_list_ingredients(db:Session,item:user_project_schemas.ItemSchema,itemID:
         ingredientsId.append(ingredient.ingredientId)
         ingredientsNameQty.append((ingredient.nameIngredient,ingredient.quantity))
 
-    print("Here List Ingredients ======>>>>", ingredientsNameQty)
     #Query the ingredient by Id extracted in  ingredientsId []
     ingredientsQuery = []
     for idIngredient in ingredientsId:
         ingredientsQuery.append( db.query(models.IngredientDB).filter(models.IngredientDB.ingredientId== idIngredient).first())
         db.commit()
     
-    print("Ingredients Item Req")
     for idx ,x  in enumerate (ingredientsQuery):
         print(f"Ingredient {idx} is: {x.nameIngredient} and quantity is: {x.quantity}")
     print("Ingredients Req",len_item_query)
@@ -384,17 +407,30 @@ def get_list_ingredients(db:Session,item:user_project_schemas.ItemSchema,itemID:
     #     print(f"Ingredient {idx} is: {x.nameIngredient} and quantity is: {x.quantity}")
     
     #If the len of both arrays are the same then we should update  and same id
-    if len_item_query == len_itemDB and item.edit_flag:
-        print("Update array equal")
-        for ingredientQuery in ingredientsQuery:
-            for ingredientNewName,ingredientNewQty in ingredientsNameQty:
-                if ingredientQuery.nameIngredient == ingredientNewName:
+
+
+    if item.edit_flag:
+        
+        item_req_dict = item.dict(exclude_unset=True)
+        # itemDB_dict = itemDB.dict(exlcude_unset=True)
+        for key,val in item_req_dict.items():
+            if (key == 'nameItem' or key == 'type'or key == 'cooking' 
+                or key == 'price' or key == 'image_url' or key == 'updatedAtTime'
+                or key == 'unit' or key == 'summary'):
+                setattr(itemDB,key,val)
+
+        # db.add(itemDB)
+        # db.commit()
+        # db.refresh(itemDB)
+        for ingredientsItemDB in itemDB.ingredients:
+            for ingredient in item_req_dict['ingredients']:
+                if ingredient['ingredientId']  == ingredientsItemDB.ingredientId:
                     print("Name Equal")
-                    ingredientQuery.quantity = ingredientNewQty
-                    print(f'Ingredient name :{ingredientQuery.nameIngredient} , ingredient quantity: {ingredientQuery.quantity}')
-                    db.add(ingredientQuery)
+                    ingredientsItemDB.quantity= ingredient['quantity'] 
+                    # print(f'Ingredient name :{ingredientQuery.nameIngredient} , ingredient quantity: {ingredientQuery.quantity}')
+                    db.add(itemDB)
                     db.commit()
-                    db.refresh(ingredientQuery)
+                    db.refresh(itemDB)
 
     if len_item_query > len_itemDB and item.add :
     #If the len of both arrays are not the same then we should add
@@ -404,13 +440,13 @@ def get_list_ingredients(db:Session,item:user_project_schemas.ItemSchema,itemID:
                 break
             else:
                 [ingredientNewName,ingredientNewQty] =  ingredientsNameQty[idx]
-                print(f'Index is:{idx}, and Im at what ingredient {ingredientNewName}, and with qty {ingredientNewQty}')
-                print(f'Index is:{idx}, and Im at what ingredient {ingredientsQuery[idx].nameIngredient}, and with qty {ingredientsQuery[idx].quantity}')
+                # print(f'Index is:{idx}, and Im at what ingredient {ingredientNewName}, and with qty {ingredientNewQty}')
+                # print(f'Index is:{idx}, and Im at what ingredient {ingredientsQuery[idx].nameIngredient}, and with qty {ingredientsQuery[idx].quantity}')
                 if ingredientsQuery[idx].nameIngredient == ingredientNewName:
-                    print("Name Equal")
-                    print("Quantity Before",ingredientsQuery[idx].quantity)
+                    # print("Name Equal")
+                    # print("Quantity Before",ingredientsQuery[idx].quantity)
                     ingredientsQuery[idx].quantity -=ingredientNewQty
-                    print("Quantity After",ingredientsQuery[idx].quantity)
+                    # print("Quantity After",ingredientsQuery[idx].quantity)
 
                     db.add(ingredientsQuery[idx])
                     db.commit()
@@ -420,5 +456,4 @@ def get_list_ingredients(db:Session,item:user_project_schemas.ItemSchema,itemID:
     for idx ,x  in enumerate (ingredientsQuery):
         print(f"Ingredient {idx} is: {x.nameIngredient} and quantity is: {x.quantity}")
         
-    return ingredientsQuery 
-
+    return itemDB 

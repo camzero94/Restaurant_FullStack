@@ -26,7 +26,7 @@ interface LayoutAuthProps {
 const LayoutAuth: React.FC<LayoutAuthProps> = ({ children, submitProps }) => {
   const paperStyle = {
     padding: 20,
-    height: '60vh',
+    height: '70vh',
     width: 300,
     margin: '100px auto',
   };

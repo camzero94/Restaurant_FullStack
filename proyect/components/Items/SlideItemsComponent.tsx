@@ -1,5 +1,4 @@
-
-import IngredientCard from '../Ingredients/IngredientCard'
+import ItemCardComponent from '../Items/ItemCard'
 import { Grid, Box, MenuItem } from '@mui/material'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
@@ -16,8 +15,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Project_Page_Ctx } from '../../pages/users/[id]/projects/[projectid]/index'
 import IContextProject from '../../namespaces/Ingredients_Page_States'
 import { Modal } from '@mui/material'
-import Edit_Ingredient from '../Ingredients/Edit_Ingredient'
-import Ingredient from '../../namespaces/Ingredient'
+import Edit_Item from '../Items/Edit_Item'
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -72,33 +70,38 @@ const boxOutside = {
   spacing: 5,
   justifyContent: "center"
 }
-const SlideIngredient: React.FC = () => {
+const SlideItem: React.FC = () => {
 
-  const { searchName, openEditIngredient, setOpenEditIngredient, ingredientArray, setIdDeletedIngredient, setDeleteFlag, anchorEl, setanchorEl } = useContext(Project_Page_Ctx) as IContextProject
+  const { openEditItem, setOpenEditItem, itemArr, searchName, setIdDeletedItem, setDeleteFlagItem, anchorElItem, setanchorElItem } = useContext(Project_Page_Ctx) as IContextProject
 
 
-  
+  const openItem = Boolean(anchorElItem)
+  console.log("Open Item", openItem)
 
-  const open = Boolean(anchorEl)
-  console.log("Open Ingredient",Boolean(anchorEl))
-  const handleClose = () => {
-    setanchorEl(null);
-    setDeleteFlag(false)
+  const handleCloseItem = () => {
+    setanchorElItem(null);
+    setDeleteFlagItem(false)
   }
 
-  let foundArray = ingredientArray.filter(ingredient => ingredient.nameIngredient === searchName)
+  // let foundArray = ingredientArray.filter(ingredient => ingredient.nameIngredient === searchName)
+  //  console.log("Found Array:===>",foundArray)
+  //  console.log("Anchor El ===>" + anchorEl)
 
-  const handleOpenEditIngredient = () => {
-    setOpenEditIngredient(true);
+  const handleOpenEditItem = () => {
+    setOpenEditItem(true);
+    console.log("Clicked Edit Open", openEditItem)
   }
 
-  const handleCloseEditIngredient = () => {
-    setOpenEditIngredient(false);
+  const handleCloseEditItem = () => {
+    setOpenEditItem(false);
+    console.log("Clicked Edit Close", openEditItem)
 
   }
-  const handleDeleteIngredient = async () => {
-    setDeleteFlag(true)
+  const handleDeleteItem= async () => {
+    setDeleteFlagItem(true)
   }
+
+
   return (
 
     <>
@@ -113,29 +116,17 @@ const SlideIngredient: React.FC = () => {
       >
         <Box sx={boxOutside}>
           <Grid container direction="row" alignContent="baseline">
-            {searchName ?
-              ingredientArray.filter(searchIngredient => searchIngredient.nameIngredient === searchName)
-                .map((ingredient) => {
+            {
+              itemArr
+                .map((item) => {
                   return (
-                    <SwiperSlide key={ingredient.ingredientId}>
+                    <SwiperSlide key={item.itemId}>
                       <Grid item >
-                        <IngredientCard ingredient={ingredient} setanchorEl={setanchorEl} setIdDeletedIngredient={setIdDeletedIngredient} />
+                        <ItemCardComponent item={item} setanchorElItem={setanchorElItem} setIdDeletedItem={setIdDeletedItem} />
                       </Grid>
                     </SwiperSlide>
                   )
-                }
-                )
-              :
-              ingredientArray.map((ingredient) => {
-                return (
-                  <SwiperSlide key={ingredient.ingredientId}>
-                    <Grid item >
-                      <IngredientCard ingredient={ingredient} setanchorEl={setanchorEl} setIdDeletedIngredient={setIdDeletedIngredient} />
-                    </Grid>
-                  </SwiperSlide>
-                )
-              }
-              )
+                })
             }
           </Grid>
         </Box >
@@ -144,48 +135,72 @@ const SlideIngredient: React.FC = () => {
       <StyledMenu
         id="style-menu"
         MenuListProps={{
-          'aria-labelledby': 'customized-button',
+         'aria-labelledby': 'customized-button',
 
         }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
+        anchorEl={anchorElItem}
+        open={openItem}
+        onClose={handleCloseItem}
       >
 
         <Modal
-          open={openEditIngredient}
-          onClose={handleCloseEditIngredient}
+          open={openEditItem}
+          onClose={handleCloseEditItem}
         >
-          <Edit_Ingredient />
+          <Edit_Item/>
         </Modal>
 
-        <MenuItem onClick={handleOpenEditIngredient} disableRipple>
+        <MenuItem onClick={handleOpenEditItem} disableRipple>
           <EditIcon />
           Edit
         </MenuItem>
 
-        <MenuItem onClick={handleDeleteIngredient} disableRipple>
+        <MenuItem onClick={handleDeleteItem } disableRipple>
           <FileCopyIcon />
           Delete
         </MenuItem>
 
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleCloseItem} disableRipple>
           <ArchiveIcon />
           Archive
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleCloseItem} disableRipple>
           <MoreHorizIcon />
           More
         </MenuItem>
       </StyledMenu>
 
+
     </>
   );
 }
 
-export default SlideIngredient;
+export default SlideItem;
 
 
 
-
+            // { searchName? 
+            //   ingredientArray.filter(searchIngredient=>searchIngredient.nameIngredient === searchName)
+            //   .map((ingredient) => {
+            //     return (
+            //       <SwiperSlide key={ingredient.ingredientId}>
+            //         <Grid item >
+            //           <IngredientCard ingredient={ingredient} setanchorEl={setanchorEl} setIdDeletedIngredient={setIdDeletedIngredient} />
+            //         </Grid>
+            //       </SwiperSlide>
+            //     )
+            //   }
+            //   )
+            // :
+            //   ingredientArray.map((ingredient) => {
+            //     return (
+            //       <SwiperSlide key={ingredient.ingredientId}>
+            //         <Grid item >
+            //           <IngredientCard ingredient={ingredient} setanchorEl={setanchorEl} setIdDeletedIngredient={setIdDeletedIngredient} />
+            //         </Grid>
+            //       </SwiperSlide>
+            //     )
+            //   }
+            //   )
+            // }

@@ -22,7 +22,7 @@ item_router = re = APIRouter()
 # CRUD operations for Ingredients
 
 
-@re.post("/items", response_model_exclude_none=True)
+@re.post("/items/{projectId}", response_model_exclude_none=True)
 async def item_create(
     request: Request,
     projectId: int,
@@ -30,6 +30,7 @@ async def item_create(
     db=Depends(get_db),
     current_user=Depends(get_current_active_user),
 ):
+    print("Here Is the Item Id   ===>", projectId)
     print("Here Is the Item   ===>", item)
 
     """
@@ -37,6 +38,7 @@ async def item_create(
     """
     # Get Current Project
     currentProject = get_project(db, projectId)
+
     # Create Item
     createItem = create_item(db, item, projectId)
 
@@ -54,7 +56,6 @@ async def item_create(
 @re.get("/items/{project_id}", response_model_exclude_none=True)
 async def item_List(
     response: Response,
-
     project_id: int,
     db=Depends(get_db),
     current_user=Depends(get_current_active_user),
@@ -74,13 +75,14 @@ async def edit_item(
     db=Depends(get_db),
     current_user=Depends(get_current_active_user),
 ):
-    # Edit the item add new ingredient or Delete ingredient
-    ingredientList = get_list_ingredients(db, item_req,item_id)
-    edited_item = item_edit(db,item_id,item_req,ingredientList)
-    print(edited_item)
-    return edited_item
+    # Edit the item, add new ingredient or Delete ingredient
+    item= get_list_ingredients(db, item_req,item_id)
+    # edited_item = item_edit(db,item_id,item_req,ingredientList)
+    # print(edited_item)
 
-@re.delete("/items/{item_id}", response_model_exclude_none=True)
+    return item
+
+@re.delete("/item/{item_id}", response_model_exclude_none=True)
 async def delete_item(
     request: Request,
     item_id: int,

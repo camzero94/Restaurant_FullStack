@@ -130,9 +130,37 @@ class UpdateIngredient(BaseIngredient):
     class Config:
         orm_mode = True
 
+# Menu Schema
+class BaseMenu(BaseModel):
+    nameMenu:str 
+    description:str
+    type:str
+    summary:str = None
+    image_url:str
+    is_active: bool=False
 
+class CreateMenu(BaseMenu):
+    createdAtTime:datetime = None
+    items: t.List[Item]
+    add:t.Optional[bool] = False
+    delete:t.Optional[bool] = False
+    edit_flag: bool = False
+    class Config:
+        orm_mode = True
+        arbitrary_types_allowed =True
 
-#Schemas Ingredient, Item,Project 
+    
+class Menu(CreateMenu):
+    MenuId:int
+    class Config:
+        orm_mode = True
+
+class UpdateMenu(BaseMenu):
+    updatedAtTime:datetime 
+    class Config:
+        orm_mode = True
+
+#Schemas Ingredient, Item,Project , Menu
 
 class Recipe_TableSchema(BaseModel):
 
@@ -165,9 +193,31 @@ class ItemSchema(BaseItem):
     createdAtTime:datetime
     updatedAtTime:t.Optional[datetime]
     ingredients: t.List[Ingredient]
+    menus:t.Optional[t.List[Menu]]
     add:t.Optional[bool] = False
     delete:t.Optional[bool] = False
     edit_flag: bool = False
+
+    class Config:
+        orm_mode = True
+        arbitrary_types_allowed =True
+
+# class Menu_ItemSchema(BaseModel):
+#
+#     menuId:t.Optional[int] =None
+#     itemId:t.Optional[int]=None
+#     active:bool = False
+#     item: t.Optional[Item]
+#     menu:t.Optional[Ingredient]
+#
+#     class Config:
+#         orm_mode = True
+#         arbitrary_types_allowed =True
+class MenuSchema(BaseMenu):
+
+    createdAtTime:datetime
+    updatedAtTime:t.Optional[datetime]
+    items: t.List[Item]
 
     class Config:
         orm_mode = True

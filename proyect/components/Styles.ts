@@ -98,6 +98,44 @@ export const cardItem= {
 }
 
 
+export const cardMenu= {
+  root: {
+    display: "flex",
+    padding: 2,
+    justifyContent: "space-around",
+    flexWrap: "nowrap",
+    width: "maxWidth",
+  },
+  paper: {
+    display: "flex",
+    flexGrow: 1,
+    height:250
+  },
+  containerPaper: {
+    alignItems: 'center',
+  },
+  image: {
+    display: 'flex',
+    maxHeight: 135,
+    maxWidth: 261
+  },
+  price:{
+    display:'flex',
+    justifyContent:'center',
+    
+  },
+  containerText: {
+    display: 'flex',
+    width: "maxWidth",
+  },
+  logo: {
+    width: 18,
+    height: 18,
+    // bgcolor: deepOrange[500],
+  },
+  button: {
+  }
+}
 //Style Button Item Post
 
 export const post_button_add_delete= {

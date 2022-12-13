@@ -1,24 +1,28 @@
 
 import React, { createContext, useState, useEffect } from 'react';
-import SecurityLayout from '../../../../../components/MainNavigation/SecurityLayout'
-import LayoutComponent from '../../../../../components/MainNavigation/LayoutComponent'
-import HeaderIngredient from '../../../../../components/Ingredients/HeaderIngredient'
-import SlideIngredient from '../../../../../components/Ingredients/SlideIngredientsComponent'
-import SlideItem from '../../../../../components/Items/SlideItemsComponent'
+import { useRouter } from 'next/router'
 import { Modal } from '@mui/material'
+
+import SecurityLayout from '../../../../../components/MainNavigation/SecurityLayout'
+import IContextProject from '../../../../../namespaces/Ingredients_Page_States'
+import LayoutComponent from '../../../../../components/MainNavigation/LayoutComponent'
 import Post_Ingredient from '../../../../../components/Ingredients/Post_Ingredient'
 import Post_Item from '../../../../../components/Items/PostItem'
-import { useRouter } from 'next/router'
-import IContextProject from '../../../../../namespaces/Ingredients_Page_States'
-import HeaderItem from '../../../../../components/Items/HeaderItem'
+import SlideItem from '../../../../../components/Items/SlideItemsComponent'
+import SlideIngredient from '../../../../../components/Ingredients/SlideIngredientsComponent'
+import SlideMenu from '../../../../../components/Menus/SlideMenuComponent'
 import Ingredient from '../../../../../namespaces/Ingredient'
 import Item from '../../../../../namespaces/Item'
-
+import Menu from '../../../../../namespaces/Menu'
+import HeaderIngredient from '../../../../../components/Ingredients/HeaderIngredient'
+import HeaderItem from '../../../../../components/Items/HeaderItem'
+import HeaderMenu from '../../../../../components/Menus/HeaderMenu';
 
 export const Project_Page_Ctx = createContext<IContextProject | null>(null)
 
 let ingredientArray: Ingredient.Description[] = [];
 let itemArr: Item.Description[] = []
+let menuArr: Menu.Description[] = []
 
 function Project_Page() {
 
@@ -48,6 +52,8 @@ function Project_Page() {
   //Menus States
   const [openMenuModal, setOpenMenu] = useState<boolean>(false)
   const [openEditMenu, setOpenEditMenu] = useState<boolean>(false);
+  const [menuArray,setMenuArray] = useState<Menu.Description[]>([])
+  const [anchorElMenu, setanchorElMenu] = useState<null | HTMLElement>(null)
 
   const statesPage = {
 
@@ -79,6 +85,13 @@ function Project_Page() {
     setIdDeletedItem: setIdDeletedItem,
     setDeleteFlagItem: setDeleteFlagItem,
 
+    //Menu States
+    setOpenMenu:setOpenMenu,
+    menuArray:menuArray,
+    setOpenEditMenu:setOpenEditMenu,
+    openEditMenu:openEditMenu,
+    setanchorElMenu: setanchorElMenu,
+    anchorElMenu: anchorElMenu,
   }
 
   //Methods Ingredients Modals
@@ -92,6 +105,31 @@ function Project_Page() {
   
   
 
+  const getMenusAsync = async (token: String, projectid: any) => {
+
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    };
+    try {
+      const res = await fetch(`http://localhost:8000/api/v1/menus/${projectid}`, requestOptions);
+
+      if (!res.ok) {
+        throw new Error(`HTTP error: ${res.status}`);
+      }
+      const data = await res.json()
+      menuArr= Object.assign([], data)
+      setMenuArray(menuArr)
+      setProjectId(projectid)
+      // setanchorEl(null)
+    }
+    catch (error: any) {
+      console.log("Could not Fetch Data Item" + error);
+    }
+  }
   const getItemsAsync = async (token: String, projectid: any) => {
 
     const requestOptions = {
@@ -219,6 +257,9 @@ function Project_Page() {
     console.log("Flag is =====",deleteFlagItem)
     deleteFlagItem ? deleteItemAsync(token, idDeleteItem) : null
 
+    //Menu States
+    projectid ? getMenusAsync(token, projectid) : null
+
   }, [router, deleteFlag,deleteFlagItem]);
 
 
@@ -227,6 +268,8 @@ function Project_Page() {
       <Project_Page_Ctx.Provider value={statesPage}>
         <SecurityLayout>
           <LayoutComponent>
+            <HeaderMenu activity="My Menu" />
+            <SlideMenu/>
             <HeaderItem activity="My Items" />
             <SlideItem/>
             <HeaderIngredient activity="My Ingredients" />

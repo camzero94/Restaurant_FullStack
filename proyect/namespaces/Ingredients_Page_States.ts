@@ -2,6 +2,7 @@
 import { Dispatch, SetStateAction } from 'react'
 import Ingredient from '../namespaces/Ingredient'
 import Item from './Item'
+import Menu from './Menu'
 
 interface IContextProject {
 
@@ -26,14 +27,17 @@ interface IContextProject {
   setOpenMenu?: Dispatch<SetStateAction<boolean>>;
   openEditMenu?: boolean;
   setOpenEditMenu?: Dispatch<SetStateAction<boolean>>;
+  menuArray?: Menu.Description[]
 
   userId?: number | string;
 
-  //Menu States
+  //Menu States Items
   setanchorEl?: Dispatch<SetStateAction<HTMLElement | null>>;
   anchorEl?: HTMLElement | null
   setanchorElItem?: Dispatch<SetStateAction<HTMLElement | null>>;
   anchorElItem?: HTMLElement | null
+  setanchorElMenu?: Dispatch<SetStateAction<HTMLElement | null>>;
+  anchorElMenu?: HTMLElement | null
   //Query Project
   projectId?: any
 

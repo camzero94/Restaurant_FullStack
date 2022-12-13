@@ -1,0 +1,27 @@
+version: '1.0'
+services:
+  postgres:
+    image: postgres:12
+    restart: always
+    enviroment:
+
+      POSTGRES_USER: camzero
+      POSTGRES_PASSWORD: 1234
+      ports:
+        - '5432:5432'
+      volumes:
+        - db-data:/var/lib/postgresql/data:cached
+
+  pgadmin:
+    image: dbpage/pgadmin4:latest
+    enviroment:
+      PGADMIN_DEFAULT_EMAIL: u5500360@unimilitar.edu.co 
+      PGADMIN_DEFAULT_PASSWORD: 1234
+      ports:
+        - '5050:80'
+      volumes:
+        - pgadmin-data:/var/lib/pgadmin
+
+
+
+

@@ -457,3 +457,82 @@ def get_list_ingredients(db:Session,item:user_project_schemas.ItemSchema,itemID:
         print(f"Ingredient {idx} is: {x.nameIngredient} and quantity is: {x.quantity}")
         
     return itemDB 
+
+
+# Menu helper functions 
+
+def create_menu(db:Session,menu:user_project_schemas.MenuSchema, projectIdreq:int) -> user_project_schemas.MenuSchema:
+    print("Here =====>Item")
+    db_menu= models.MenuDB(
+        nameMenu= menu.nameMenu,
+        description = menu.description,
+        type = menu.type,
+        summary= menu.summary,
+        image_url = menu.image_url,
+        createdAtTime = menu.createdAtTime,
+        projectId = projectIdreq,
+    ) 
+    db.add(db_menu)
+    db.commit()
+    db.refresh(db_menu)
+    return db_menu 
+
+def get_list_items_by_name(db:Session, menu:user_project_schemas.MenuSchema):       
+
+    print("Here=======>>> START GET LIST IEMS BY NAME")
+
+    # Extract ingredients from item recived from user
+    itemsId_Name= []
+    for item in menu.items:
+        itemsId_Name.append((item.itemId,item.nameItem))
+
+
+    print("Here List Items ======>>>>", itemsId_Name)
+
+    #Query the item by Id extracted in  itemsId[]
+    itemsQuery = []
+    for item in itemsId_Name:
+        itemsQuery.append( db.query(models.ItemDB).filter(models.ItemDB.itemId== item[0]).first())
+        db.commit()
+    
+    print("Here=======>>>", itemsQuery)
+    for idx ,x  in enumerate (itemsQuery):
+        print(f"Item {idx} is Id  : {x.itemId} and name is: {x.nameItem}")
+
+    return itemsQuery
+
+
+def add_items_menu(db:Session, menu:user_project_schemas.CreateMenu,createdMenu:user_project_schemas.CreateMenu, itemsList):
+    print("Create Menu_Items")
+    print(f'This is the created Menu: {createdMenu}, and this is the req menu: {menu}')
+    db_menuItems= []
+    
+    for idx,item in enumerate(menu.items):
+
+        db_menuItem = models.MenuItem()
+        db_menuItems.append(db_menuItem)
+        # print(f'The idx is: {idx}, the item is {itemsList[idx].nameItem}')
+        db_menuItem.item = itemsList[idx]
+        createdMenu.items.append(db_menuItem)
+        db.add(createdMenu)
+        db.commit()
+    
+    return createdMenu 
+
+def get_menus(db:Session, projectId:int,skip=0,limit=10):
+    menus= db.query(models.MenuDB).options(joinedload(models.MenuDB.items).joinedload(models.MenuItem.item)).filter(models.MenuDB.projectId== projectId).offset(skip).limit(limit).all()
+    return menus 
+
+def get_menu_no_ingredients(db:Session,menu_id:int):
+    menu = db.query(models.MenuDB).filter(models.MenuDB.menuId== menu_id).first()
+    return menu 
+
+def menu_delete(db:Session, menuId:int):
+
+    print("====================DELETE Here========================")
+    menu= get_menu_no_ingredients(db,menuId)
+    if not menu:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Menu not found")
+    db.delete(menu)
+    db.commit()
+    return "Successfully Menu Deleted"

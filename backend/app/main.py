@@ -10,6 +10,8 @@ from api.routers.users import user_router
 from api.routers.projects import project_router
 from api.routers.ingredients import ingredient_router 
 from api.routers.items import item_router
+from api.routers.menus import menu_router
+
 from core.auth import get_current_active_user
 from app.db.server import create_project, add_project_to_user, get_user
 from app.core.auth import get_current_active_leader, get_current_active_user
@@ -78,6 +80,12 @@ app.include_router(
     dependencies=[Depends(get_current_active_user)],
 )
 app.include_router(
+    menu_router,
+    prefix="/api/v1",
+    tags=["menus"],
+    dependencies=[Depends(get_current_active_user)],
+)
+app.include_router(
     ingredient_router,
     prefix="/api/v1",
     tags=["ingredients"],
@@ -85,6 +93,5 @@ app.include_router(
 )
 
 app.include_router(auth_router, prefix="/api", tags=["auth"])
-
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)

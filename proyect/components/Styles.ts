@@ -1,4 +1,14 @@
 
+  export const box_header_Menu= {
+
+    display: "flex",
+    mt: 2,
+    ml: 2,
+    mr: 2,
+    mb: 1,
+    maxWidth: 600,
+    maxHeight: 32,
+  }
   export const box_header_Item= {
 
     display: "flex",

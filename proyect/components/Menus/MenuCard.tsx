@@ -5,10 +5,10 @@ import { useState, useContext, useEffect } from 'react'
 import Image from 'next/image'
 import { Project_Page_Ctx } from '../../pages/users/[id]/projects/[projectid]/index'
 import Menu from '../../namespaces/Menu'
+import Item from '../../namespaces/Item'
 import MenuLogo from '../../public/Menu_Restaurant.svg'
 import { cardMenu } from '../Styles'
 import MenuItem from '../../namespaces/Menu_Item'
-
 interface props {
   menu?: Menu.Description
   open?: boolean
@@ -16,12 +16,39 @@ interface props {
   setIdDeletedItem?: React.Dispatch<React.SetStateAction<any>>
 }
 
-const MenuCardComponent: React.FC<props> = ({
-  menu,
-  setanchorElMenu,
-}) => {
+const MenuCardComponent: React.FC<props> = ({ menu, setanchorElMenu }) => {
+  console.log('Menu Array Menu Card', menu)
 
-  console.log("Menu Array Menu Card",menu)
+  const [randomArr,setRandomArr ] = useState<Number[]>([])
+
+  const chooseFourRandom = (itemArr) => {
+
+    let randomArrFour: Number[]= []
+    //If Items length are grater than 4
+    if (randomArrFour.length < 4) {
+      for (let i=0; i < itemArr.length;i++){
+        randomArrFour.push(i) 
+        }
+    } 
+    else {
+      while (randomArrFour.length <= 4) {
+        let ranNumber = Math.floor(Math.random() * itemArr.length)
+        console.log('Here NUmber ==========', ranNumber)
+        if (randomArrFour.length === 0) {
+          randomArrFour.push(ranNumber)
+        } else if (!randomArrFour.includes(ranNumber)) {
+          randomArrFour.push(ranNumber)
+        }
+      }
+    }
+
+    return randomArrFour
+  }
+  const arrRandom = async (arrItems:MenuItem.Description[])=>{
+    let res = await chooseFourRandom(arrItems)
+    setRandomArr(res)
+  }
+
   const handleClick = async (e: React.MouseEvent<HTMLElement>) => {
     // setanchorElItem(e.currentTarget);
     // setIdDeletedItem(item.itemId);
@@ -33,7 +60,12 @@ const MenuCardComponent: React.FC<props> = ({
     // })
     //   console.log("Ingredietns Name",ingredientsItemName)
   }
-
+  
+  useEffect(() => {
+    console.log("Enter Here ")
+     arrRandom(menu.items)
+  }, []) 
+  
   return (
     <>
       <Grid container sx={cardMenu.root}>
@@ -71,8 +103,16 @@ const MenuCardComponent: React.FC<props> = ({
                 <Image src={MenuLogo} alt='ingredient logo' />
               </Grid>
 
-
-              <Grid item xs={8} style={{ display:'flex', marginBottom: 0, marginTop: 3,justifyContent:'center' }}>
+              <Grid
+                item
+                xs={8}
+                style={{
+                  display: 'flex',
+                  marginBottom: 0,
+                  marginTop: 3,
+                  justifyContent: 'center',
+                }}
+              >
                 <Chip
                   label='Description'
                   size='small'
@@ -101,7 +141,7 @@ const MenuCardComponent: React.FC<props> = ({
               style={{ display: 'flex', padding: '0.5rem' }}
             >
               {menu.items.map((menuItem, index) => {
-                if (index < 8) {
+                if (randomArr.includes(index)) {
                   return (
                     <Grid item xs={3}>
                       <Chip

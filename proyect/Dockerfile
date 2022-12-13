@@ -3,7 +3,7 @@ FROM node:alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /project
 COPY package.json  ./
-RUN npm install 
+RUN npm install -g  npm@9.2.0
 
 #Rebuild the source code only when needed
 FROM node:alpine AS builder

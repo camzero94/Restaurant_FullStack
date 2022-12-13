@@ -8,6 +8,7 @@ import IContextProject from '../../../../../namespaces/Ingredients_Page_States'
 import LayoutComponent from '../../../../../components/MainNavigation/LayoutComponent'
 import Post_Ingredient from '../../../../../components/Ingredients/Post_Ingredient'
 import Post_Item from '../../../../../components/Items/PostItem'
+import Post_Menu from '../../../../../components/Menus/PostMenu' 
 import SlideItem from '../../../../../components/Items/SlideItemsComponent'
 import SlideIngredient from '../../../../../components/Ingredients/SlideIngredientsComponent'
 import SlideMenu from '../../../../../components/Menus/SlideMenuComponent'
@@ -102,7 +103,9 @@ function Project_Page() {
   const handleCloseItem= () => {
     setOpenItem(false);
   }
-  
+  const handleCloseMenu = ()=>{
+    setOpenMenu(false);
+    }  
   
 
   const getMenusAsync = async (token: String, projectid: any) => {
@@ -286,6 +289,12 @@ function Project_Page() {
             onClose={handleCloseItem}
           >
             <Post_Item/>
+          </Modal>
+          <Modal
+            open={openMenuModal}
+            onClose={handleCloseMenu}
+          >
+            <Post_Menu/>
           </Modal>
         </SecurityLayout>
       </Project_Page_Ctx.Provider >

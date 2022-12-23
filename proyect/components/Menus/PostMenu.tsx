@@ -1,5 +1,6 @@
 
-import SoupKitchenIcon from '@mui/icons-material/SoupKitchen'
+
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import {
   Modal,
   Button,
@@ -16,192 +17,153 @@ import React, {
   useContext,
   useEffect,
 } from 'react'
+import { Alert } from '@mui/material'
+import CheckItem from './Check_Items'
 import LayoutEditIngredient from '../Auth/LayoutEditIngredient'
 import Recipe from '../../namespaces/Recipe'
-import { Alert } from '@mui/material'
 import { Project_Page_Ctx } from '../../pages/users/[id]/projects/[projectid]/index'
 import IContextProject from '../../namespaces/Ingredients_Page_States'
 import { post_button_add_delete } from '../Styles'
-import CheckIngredient from '../Items/Check_Ingredients'
+import Item from '../../namespaces/Item';
 
-export interface quantityRecipe {
-  ingredientId?: number
-  nameIngredient?: string
-  quantity?: string
-  summary?: string 
-  unit?: string 
-  image_url?: string
-  createdAtTime?: string
-}
+
 const Post_Menu: React.FC = () => {
 
-  const { projectId, setOpenItem } = useContext(
-    Project_Page_Ctx
-  ) as IContextProject
+  const { projectId, setOpenMenu} = useContext(Project_Page_Ctx) as IContextProject
 
   const [error, setError] = useState<String | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
-  const [cooked, setCooked] = useState<boolean>(false)
-  const [recipes, setRecipes] = useState<Recipe.Description[]>([])
-  const [openModalAddDel, setOpenModalAddDel] = useState<boolean>()
-  const [arraySelected, setArraySelected] = useState<quantityRecipe[]>()
-  const [quantity, setQuantity] = useState<quantityRecipe[]>([])
+  const [active, setActive] = useState<boolean>(false)
 
-  const itemNameRef = useRef<HTMLInputElement>()
-  const typeRef = useRef<HTMLInputElement>()
-  const quantityRef = useRef<HTMLInputElement>()
-  const unitRef = useRef<HTMLInputElement>()
+  const [items, setItems] = useState<Item.Description[]>([])
+  const [openModalAddItem, setOpenModalAddItem] = useState<boolean>()
+  const [arraySelected, setArraySelected] = useState<Item.Description[]>()
+  const [quantity, setQuantity] = useState<Item.Description[]>([])
+
+  const menuNameRef = useRef<HTMLInputElement>()
+  const typeMenuRef = useRef<HTMLInputElement>()
   const urlStringRef = useRef<HTMLInputElement>()
   const descriptionRef = useRef<HTMLInputElement>()
-  const priceRef = useRef<HTMLInputElement>()
 
-  const handleChangeCook = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCooked(true)
-    console.log('Change Cooked')
+  const handleChangeActive = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setActive(true)
   }
-  const handleChangeNotCook = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCooked(false)
-    console.log('Change Cooked')
+  const handleChangeNotActive = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setActive(false)
   }
-  const handleClickAddDelete = () => {
-    setOpenModalAddDel(true)
+  const handleClickAddItem = () => {
+    console.log("Open Modal Add Item")
+    setOpenModalAddItem(true)
   }
-  const handleCloseCheck = () => {
-    setOpenModalAddDel(false)
+  const handleCloseAddItem = () => {
+    setOpenModalAddItem(false)
   }
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
-    try {
-      setLoading(true)
-
-      if (
-        itemNameRef.current?.value &&
-        priceRef.current?.value &&
-        unitRef.current?.value &&
-        arraySelected.length >= 1
-      ) {
-        const token = localStorage.getItem('token')
-        const dateNow = new Date().toISOString()
-
-        const item = {
-          'nameItem': itemNameRef.current?.value,
-          'type': typeRef.current?.value,
-          'cooking': cooked,
-          'quantity': 99,
-          'unit': unitRef.current?.value,
-          'price': Number(priceRef.current.value),
-          'summary': descriptionRef.current?.value,
-          'image_url': urlStringRef.current?.value,
-          'createdAtTime': dateNow,
-          'updatedAtTime': dateNow,
-          'ingredients': arraySelected,
-          'add': false,
-          'delete': false,
-          'edit_flag': false,
-        }
-        const requestOptions = {
-          method: 'POST',
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(item),
-        }
-        
-        console.log('Request=====>', requestOptions)
-        const response = projectId
-          ? await fetch(`http://localhost:8000/api/v1/items/${projectId}`, requestOptions)
-          : null
-        if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`)
-        }
-        const data = await response.json()
-        console.log('Returned Data', data)
-        location.reload()
-      } else {
-        setError('Incorrectly filled')
-      }
-    } catch (e: any) {
-      console.log(e)
-      setError('Error while POST')
-      setLoading(false)
-    }
+    // try {
+    //   setLoading(true)
+    //
+    //   if (
+    //     itemNameRef.current?.value &&
+    //     priceRef.current?.value &&
+    //     unitRef.current?.value &&
+    //     arraySelected.length >= 1
+    //   ) {
+    //     const token = localStorage.getItem('token')
+    //     const dateNow = new Date().toISOString()
+    //
+    //     const item = {
+    //       'nameItem': itemNameRef.current?.value,
+    //       'type': typeRef.current?.value,
+    //       'cooking': cooked,
+    //       'quantity': 99,
+    //       'unit': unitRef.current?.value,
+    //       'price': Number(priceRef.current.value),
+    //       'summary': descriptionRef.current?.value,
+    //       'image_url': urlStringRef.current?.value,
+    //       'createdAtTime': dateNow,
+    //       'updatedAtTime': dateNow,
+    //       'ingredients': arraySelected,
+    //       'add': false,
+    //       'delete': false,
+    //       'edit_flag': false,
+    //     }
+    //     const requestOptions = {
+    //       method: 'POST',
+    //       headers: {
+    //         accept: 'application/json',
+    //         Authorization: `Bearer ${token}`,
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify(item),
+    //     }
+    //     
+    //     console.log('Request=====>', requestOptions)
+    //     const response = projectId
+    //       ? await fetch(`http://localhost:8000/api/v1/items/${projectId}`, requestOptions)
+    //       : null
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error: ${response.status}`)
+    //     }
+    //     const data = await response.json()
+    //     console.log('Returned Data', data)
+    //     location.reload()
+    //   } else {
+    //     setError('Incorrectly filled')
+    //   }
+    // } catch (e: any) {
+    //   console.log(e)
+    //   setError('Error while POST')
+    //   setLoading(false)
+    // }
   }
 
-  const formStyle = {
-    // padding: 20,
-    // margin: '10px auto',
-    //     marginLeft: '50px',
-    marginTop: '20px ',
-  }
 
-  useEffect(() => {
-    console.log('Checked', cooked)
-    console.log('Selected Ingredients', arraySelected)
-    console.log('Quantity Arr ', quantity)
-  }, [cooked, arraySelected, quantity])
+  // useEffect(() => {
+  //   console.log('Checked', cooked)
+  //   console.log('Selected Ingredients', arraySelected)
+  //   console.log('Quantity Arr ', quantity)
+  // }, [cooked, arraySelected, quantity])
 
-  console.log('Here Recipes', recipes)
   return (
     <>
-      <LayoutEditIngredient nameForm={'New Item'} submitForm={handleSubmit}>
+      <LayoutEditIngredient nameForm={'New Menu'} submitForm={handleSubmit}>
         {error && (
           <Grid item xs={12}>
             <Alert severity='error'>{error}</Alert>
           </Grid>
         )}
 
-        <Grid container spacing={1} style={formStyle}>
+        <Grid container spacing={1} style={{marginTop: '20px '}}>
           <Grid item xs={12}>
             <TextField
-              label='Item Name'
+              label='Menu Name'
               variant='outlined'
-              placeholder='Enter Name of Item'
+              placeholder='Enter Name of Menu'
               fullWidth
               size='small'
-              inputRef={itemNameRef}
+              inputRef={menuNameRef}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label='Type of Item'
+              label='Type of Menu'
               variant='outlined'
-              placeholder='Enter Type of Item'
+              placeholder='Enter Type of Menu'
               fullWidth
               size='small'
-              inputRef={typeRef}
+              inputRef={typeMenuRef}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label='Price'
+              label='Image Menu Url'
               variant='outlined'
-              placeholder='Enter Price'
-              fullWidth
-              size='small'
-              inputRef={priceRef}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label='Image Url'
-              variant='outlined'
-              placeholder='Enter Url or Path Image '
+              placeholder='Enter Url or Path Image Menu '
               fullWidth
               size='small'
               inputRef={urlStringRef}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label='Unit'
-              variant='outlined'
-              placeholder='Enter Unit of Item'
-              fullWidth
-              size='small'
-              inputRef={unitRef}
             />
           </Grid>
           <Grid item xs={12}>
@@ -222,17 +184,17 @@ const Post_Menu: React.FC = () => {
           <Grid item xs={6}>
             <FormControlLabel
               control={
-                <Checkbox checked={cooked} onChange={handleChangeCook} />
+                <Checkbox checked={active} onChange={handleChangeActive} />
               }
-              label='Cooked'
+              label='Active'
             />
           </Grid>
           <Grid item xs={6}>
             <FormControlLabel
               control={
-                <Checkbox checked={!cooked} onChange={handleChangeNotCook} />
+                <Checkbox checked={!active} onChange={handleChangeNotActive} />
               }
-              label='Not Cooked'
+              label='Not Active'
             />
           </Grid>
         </Grid>
@@ -246,18 +208,18 @@ const Post_Menu: React.FC = () => {
             alignItems: 'center',
           }}
         >
-          <Grid item xs={6}>
+          <Grid item xs={6} style={{display:'flex',justifyContent:'center'}}>
             <Button
               variant='contained'
               style={post_button_add_delete}
-              onClick={handleClickAddDelete}
-              startIcon={<SoupKitchenIcon />}
+              onClick={handleClickAddItem}
+              startIcon={<RestaurantMenuIcon />}
             >
-              Add Ingredient
+              Add Item
             </Button>
           </Grid>
         </Grid>
-        <Grid container style={formStyle}>
+        <Grid container style={{marginTop:'20px'}}>
           <Grid item xs={12}>
             <Button variant='contained' fullWidth color='primary' type='submit'>
               Submit
@@ -265,15 +227,13 @@ const Post_Menu: React.FC = () => {
           </Grid>
         </Grid>
       </LayoutEditIngredient>
-      <Modal open={openModalAddDel} onClose={handleCloseCheck}>
-        <CheckIngredient
-          setRecipes={setRecipes}
-          recipes={recipes}
-          setOpenModalAddDel={setOpenModalAddDel}
+      <Modal open={openModalAddItem} onClose={handleCloseAddItem}>
+        <CheckItem
+          setItems={setItems}
+          items={items}
           arraySelected={arraySelected}
           setArraySelected={setArraySelected}
-          setQuantity={setQuantity}
-          quantity={quantity}
+          setOpenModalAddItem={setOpenModalAddItem}
         />
       </Modal>
     </>

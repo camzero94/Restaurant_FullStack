@@ -32,7 +32,7 @@ const LayoutEdit: React.FC<LayoutEditProps> = ({
 
   const paperStyle = {
     padding: 20,
-    height: `${nameForm === 'New Item'? '90vh':'65vh' }`,
+    height: `${nameForm === 'New Item'? '90vh':'75vh' }`,
     width: 500,
     margin: '25px auto',
     borderRadius:20,

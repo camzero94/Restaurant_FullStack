@@ -1,46 +1,16 @@
-import { UserCreate, UserList, UserEdit } from '../admin/users'
-import React, { useEffect, useState, FC } from 'react';
-import { fetchUtils, Admin as ReactAdmin, Resource } from 'react-admin';
-import simpleRestProvider from 'ra-data-simple-rest';
-import authProvider from './authProvider';
 
-const isBrowser = typeof window !== "undefined";
-function Admin() {
 
-  const httpClient = (url: any, options: any) => {
-    if (!options) {
-      options = {};
-    }
-    if (!options.headers) {
-      options.headers = new Headers({ Accept: 'application/json' });
-    }
-    options.headers.set('Access-Control-Expose-Headers', 'Content-Range');
-    console.log(options) 
-    const token = localStorage.getItem('token');
-    options.headers.set('Authorization', `Bearer ${token}`);
-    return fetchUtils.fetchJson(url, options);
-  };
+import dynamic from "next/dynamic"
 
-  const dataProvider = simpleRestProvider('http://localhost:8000/api/v1', httpClient);
+const AdminComponent = dynamic(()=>import("./admin"),{ssr:false})
 
-  return isBrowser ? (
-    <ReactAdmin dataProvider={dataProvider} authProvider={authProvider}>
-      {
-        (permissions: 'admin' | 'follower') => [
-        permissions === 'admin' ? (
-          <Resource
-            name="users"
-            list={UserList}
-            edit={UserEdit}
-            create={UserCreate}
-          />
-        ) : null,
-      ]
-      }
-    </ReactAdmin>
-  ) : null
-};
+const AdminPage = () => {
+    return <AdminComponent/>;
+  }
 
-export default Admin;
+
+
+
+export default AdminPage;
 
 

@@ -8,7 +8,7 @@ import {
   BooleanInput,
 } from 'react-admin';
 
-export const UserEdit: FC = (props) => (
+const UserEdit: FC = (props) => (
   <Edit {...props}>
     <SimpleForm>
       <TextInput disabled source="id" />
@@ -21,3 +21,5 @@ export const UserEdit: FC = (props) => (
     </SimpleForm>
   </Edit>
 );
+
+export default UserEdit;

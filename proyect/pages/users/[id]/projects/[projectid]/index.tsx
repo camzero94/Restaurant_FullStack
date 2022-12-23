@@ -36,6 +36,7 @@ function Project_Page() {
   const [openIngredientModal, setOpenIngredient] = useState<boolean>(false);
   const [openEditIngredient, setOpenEditIngredient] = useState<boolean>(false);
   const [ingredientArr, setIngredient] = useState<Ingredient.Description[]>([])
+
   const [idDeleteIngredient, setIdDeletedIngredient] = useState<any>(null)
   const [deleteFlag, setDeleteFlag] = useState<boolean>(false)
   const [searchName, setSearchName] = useState<string>("")
@@ -271,6 +272,7 @@ function Project_Page() {
       <Project_Page_Ctx.Provider value={statesPage}>
         <SecurityLayout>
           <LayoutComponent>
+
             <HeaderMenu activity="My Menu" />
             <SlideMenu/>
             <HeaderItem activity="My Items" />

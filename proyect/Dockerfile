@@ -2,15 +2,15 @@
 FROM node:alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /project
-COPY package.json  ./
-RUN npm install -g  npm@9.2.0
+COPY package.json  yarn.lock ./
+RUN yarn install --frozen-lockefile 
 
 #Rebuild the source code only when needed
 FROM node:alpine AS builder
 WORKDIR /project
 COPY . .
 COPY --from=deps /project/node_modules ./node_modules
-RUN npm run build
+RUN yarn run build
 
 #Production image , copy all the files and run next
 FROM node:alpine AS runner
@@ -30,6 +30,6 @@ USER nextjs
 
 EXPOSE 3000
 
-CMD ["npm","start"]
+CMD ["yarn","start"]
 
 

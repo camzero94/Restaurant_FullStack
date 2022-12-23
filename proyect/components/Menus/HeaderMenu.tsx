@@ -2,7 +2,9 @@ import { TextField,Grid, Box, Card, Typography, Button } from '@mui/material';
 import { Divider } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import {box_header_Menu} from '../Styles'
-import {useState} from 'react'
+import {useState,useContext} from 'react'
+import IContextProject from '../../namespaces/Ingredients_Page_States'
+import { Project_Page_Ctx } from '../../pages/users/[id]/projects/[projectid]/index'
 
 
 const box_header = {
@@ -17,13 +19,13 @@ interface Iprops{
 
 const HeaderMenu = (props:Iprops) => {
 
+  const { setOpenMenu } = useContext(Project_Page_Ctx) as IContextProject
 
   const handleChangeSearch = () =>{
-
-    }
-  const handleNewItemClick = ()=>{
-
-    }
+  }
+  const handleNewMenu = ()=>{
+    setOpenMenu(true)
+  }
 
   return (
     <>
@@ -33,7 +35,7 @@ const HeaderMenu = (props:Iprops) => {
             <Typography variant="h6">{props.activity}</Typography>
           </Grid>
           <Grid item lg={2} md={2} xs={2} >
-            <Button color='primary' variant='outlined' sx={{ maxHeight: 32 }} onClick={() => handleNewItemClick()}>
+            <Button color='primary' variant='outlined' sx={{ maxHeight: 32 }} onClick={() => handleNewMenu()}>
               Add New
             </Button>
         </Grid>

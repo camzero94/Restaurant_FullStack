@@ -10,7 +10,7 @@ import {
   EditButton,
 } from 'react-admin';
 
-export const UserList: FC = (props) => (
+const UserList: FC = (props) => (
   <List {...props}>
     <Datagrid rowClick="edit">
       <TextField source="id" />
@@ -24,3 +24,4 @@ export const UserList: FC = (props) => (
     </Datagrid>
   </List>
 );
+export default UserList;

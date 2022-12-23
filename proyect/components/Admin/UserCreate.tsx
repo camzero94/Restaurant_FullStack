@@ -7,7 +7,7 @@ import {
   BooleanInput,
 } from 'react-admin';
 
-export const UserCreate: React.FC = (props)=>(
+const UserCreate: React.FC = (props)=>(
   <Create {...props}>
     <SimpleForm>
       <TextInput source="email" />
@@ -19,4 +19,4 @@ export const UserCreate: React.FC = (props)=>(
     </SimpleForm>
   </Create>
 )
-
+export default UserCreate;

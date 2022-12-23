@@ -6,11 +6,11 @@ namespace Item {
   nameItem:string;
   price:number;
   summary:string;
-  type:string;
+  type?:string;
   quantity?:number;
   unit?:string;
-  createdAtTime?:Date;
-  updatedAtTime?:Date;
+  createdAtTime?:string;
+  updatedAtTime?:string;
   image_url?:string
   ingredients?: Recipe.Description[]
   }

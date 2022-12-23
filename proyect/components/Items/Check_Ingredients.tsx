@@ -82,7 +82,6 @@ const CheckIngredient: React.FC<propsCheckIngredients> = ({
     summaryIngredient: string,
     createdAtTime: string
   ) => {
-
     const recipeObj = {
       ingredientId: ingredientId,
       nameIngredient: nameIngredient,

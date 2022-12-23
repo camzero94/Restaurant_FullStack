@@ -1,3 +1,7 @@
 Dockerfile
+.dockerignore
+node_modules
+README.md
+.next
 npm-debug.log
 project/README.md

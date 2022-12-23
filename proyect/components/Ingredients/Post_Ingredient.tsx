@@ -1,7 +1,7 @@
 
 import { Button, Grid, TextField } from '@material-ui/core';
 import React, { useRef, FormEventHandler, useState, useContext, useEffect } from 'react';
-import LayoutAuthSignup from '../Auth/LayoutAuthSignup';
+import LayoutEditIngredient from '../Auth/LayoutEditIngredient';
 import Ingredient from '../../namespaces/User';
 import { Alert } from '@mui/material'
 import { Project_Page_Ctx} from '../../pages/users/[id]/projects/[projectid]/index'
@@ -12,7 +12,6 @@ import { Dispatch, SetStateAction } from 'react'
 const Post_Ingredient: React.FC = () => {
 
   const { projectId, setOpenIngredient } = useContext(Project_Page_Ctx) as IContextProject
-
   const [error, setError] = useState<String | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -75,70 +74,76 @@ const Post_Ingredient: React.FC = () => {
   };
   return (
     <>
-      <LayoutAuthSignup submitForm={handleSubmit}>
+      <LayoutEditIngredient nameForm={'New Ingredient'} submitForm={handleSubmit}>
         {error && (
           <Grid item xs={12}>
-            <Alert severity='error'>
-              {error}
-            </Alert>
-
+            <Alert severity='error'>{error}</Alert>
           </Grid>
         )}
-        <Grid container spacing={3} style={formStyle}>
+
+        <Grid container spacing={1} style={formStyle}>
           <Grid item xs={12}>
             <TextField
-              label='Ingredient Name'
-              variant='filled'
-              placeholder='Enter Name of Ingredient'
+              label='Item Name'
+              variant='outlined'
+              placeholder='Enter Name of Item'
               fullWidth
+              size='small'
               inputRef={ingredientNameRef}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
-              label='Quantity'
-              variant='filled'
-              placeholder='Enter Name of Leader'
+              label='Type of Item'
+              variant='outlined'
+              placeholder='Enter Type of Item'
               fullWidth
-              inputRef={quantityRef}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label='Path Image'
-              variant='filled'
-              placeholder='Enter Path Image '
-              fullWidth
-              inputRef={urlStringRef}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label='Unit'
-              variant='filled'
-              placeholder='Enter Unit of Ingredient'
-              fullWidth
+              size='small'
               inputRef={unitRef}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
+              label='Price'
+              variant='outlined'
+              placeholder='Enter Price'
+              fullWidth
+              size='small'
+              inputRef={quantityRef}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label='Image Url'
+              variant='outlined'
+              placeholder='Enter Url or Path Image '
+              fullWidth
+              size='small'
+              inputRef={urlStringRef}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
               label='Description'
-              variant='filled'
+              variant='outlined'
               placeholder='Enter Description'
               fullWidth
+              multiline
+              rows={5}
+              size='small'
               inputRef={descriptionRef}
             />
           </Grid>
         </Grid>
-        <Grid container spacing={6} style={formStyle}>
+
+        <Grid container style={{marginTop:'40px'}}>
           <Grid item xs={12}>
             <Button variant='contained' fullWidth color='primary' type='submit'>
               Submit
             </Button>
           </Grid>
         </Grid>
-      </LayoutAuthSignup>
+      </LayoutEditIngredient>
     </>
   );
 }
